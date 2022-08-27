@@ -1,0 +1,25 @@
+.postDetail {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .postDetailContainer {
+    width: 80%;
+    height: 70%;
+    text-align: center;
+    margin: 10px;
+    background-color: silver;
+    box-shadow: 0 5px 5px black;
+  }
+
+  button {
+    font-size: 15px;
+    font-weight: 500;
+    background: skyblue;
+    color: blue;
+    border: none;
+  }
+}
