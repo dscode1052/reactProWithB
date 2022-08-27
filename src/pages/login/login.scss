@@ -1,0 +1,57 @@
+.login {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("../../assets/images/banner1.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  .container {
+    width: 350px;
+    height: 300px;
+    // background-color: yellow;
+
+    .loginTitle {
+      font-size: 27px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 45px;
+    }
+
+    .loginForm {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      // background-color: yellowgreen;
+
+      .mInput {
+        width: 100%;
+        // height: 30px;
+        margin-bottom: 20px;
+      }
+
+      .loginBtn {
+        width: 100%;
+        // height: 30px;
+        margin: 15px 0 5px 0;
+      }
+
+      .rLink {
+        width: 100%;
+        text-align: end;
+
+        .rLinkText {
+          padding-right: 5px;
+          text-decoration: none;
+        }
+      }
+    }
+
+    .lLink {
+      text-decoration: none;
+    }
+  }
+}
