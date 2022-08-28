@@ -17,7 +17,7 @@ const PostPage = () => {
 
   useEffect(() => {
     getPostAll().then(postsData => setPostsAll(postsData));
-  });
+  },[]);
 
   const postDetailHandler = (id) => {
     navigate(`/posts/${id}`);    
@@ -28,14 +28,27 @@ const PostPage = () => {
     setCurrentPage(Number(e.target.id));
   }
 
+  const dataAll = postsAll.data;
   const pages = [];
-  for (let i = 1; i < Math.ceil(postsAll.length/itemsPerPage); i++) {
+  for (let i = 1; i < Math.ceil(dataAll.length/itemsPerPage); i++) {
     pages.push(i);    
   }
 
+   console.log("111: ",postsAll.data);
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = postsAll.slice(indexOfFirstItem, indexOfLastItem);
+
+  // console.log({indexOfLastItem});
+  // console.log({indexOfFirstItem});
+
+  // const currentItems = postsAll.slice(indexOfFirstItem, indexOfLastItem);
+  // const currentItems = postsAll.slice(indexOfFirstItem, indexOfLastItem);
+  // const currentItems = Object.keys(postsAll).slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = Object.entries(postsAll).slice(indexOfFirstItem, indexOfLastItem);
+  // const currentItems = Array.prototype.slice(postsAll.data, indexOfFirstItem, indexOfLastItem)
+
+  console.log("222: ",currentItems);
 
   const renderPageNumbers = pages.map(number => {
     if(number < maxPageNumberLimit + 1 && number > minPageNumberLimit){
@@ -78,10 +91,10 @@ const PostPage = () => {
 
       <div className="postPerPage">      
       {
-        currentItems.length > 0 ?  
-        currentItems.map((post) => (   
-            <div key={post.id} className="container" onClick={() => postDetailHandler(post.id)}>
-              <PostCard post={post} />   
+        currentItems[1]?.length > 0 ?  
+        currentItems[1].map((post) => (   
+            <div key={post[1].id} className="container" onClick={() => postDetailHandler(post[1].id)}>
+              <PostCard post={post[1]} />   
             </div>
           ))          
         :
