@@ -10,8 +10,6 @@ const POST_BASE_URL = '/api/posts';
 export const getPostAll = async () => {
   const response = await axios.get(`${POST_BASE_URL}`);
   
-  console.log("000: ",response);
-
   return response.data;
 }
 

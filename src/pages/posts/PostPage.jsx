@@ -1,10 +1,10 @@
-import './postPage.scss';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
-import { getPostPage, getPostAll } from '../../api/postService';
-import PostCard from '../../components/postCard/PostCard';
+import "./postPage.scss";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { getPostPage, getPostAll } from "../../api/postService";
+import PostCard from "../../components/postCard/PostCard";
 
-const PostPage = () => {  
+const PostPage = () => {
   const [postsAll, setPostsAll] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -12,29 +12,34 @@ const PostPage = () => {
   const [pageNumberLimit, setPageNumberLimit] = useState(5);
   const [maxPageNumberLimit, setMaxPageNumberLimit] = useState(5);
   const [minPageNumberLimit, setMinPageNumberLimit] = useState(0);
-
+  // handle logics from customhook, and pass the from the useContext
+  // Cache all data in FE, dont load duplicated data
+  // you can just load the postsAll once, when you first time load the page.
+  // you can just load the postDetail onece too, when you first time enter a post detail page.
   const navigate = useNavigate();
 
   useEffect(() => {
-    getPostAll().then(postsData => setPostsAll(postsData));
-  },[]);
+    const onLoadData = async () => {
+      const result = await getPostAll();
+
+      setPostsAll(result.data);
+    };
+    onLoadData();
+  }, []);
 
   const postDetailHandler = (id) => {
-    navigate(`/posts/${id}`);    
-  }
+    navigate(`/posts/${id}`);
+  };
 
   // Pagination
   const handleClick = (e) => {
     setCurrentPage(Number(e.target.id));
-  }
-
-  const dataAll = postsAll.data;
+  };
+  // remove all these logics
   const pages = [];
-  for (let i = 1; i < Math.ceil(dataAll.length/itemsPerPage); i++) {
-    pages.push(i);    
+  for (let i = 1; i < Math.ceil(postsAll?.length / itemsPerPage); i++) {
+    pages.push(i);
   }
-
-   console.log("111: ",postsAll.data);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -42,20 +47,18 @@ const PostPage = () => {
   // console.log({indexOfLastItem});
   // console.log({indexOfFirstItem});
 
-  // const currentItems = postsAll.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = postsAll?.slice(indexOfFirstItem, indexOfLastItem);
   // const currentItems = postsAll.slice(indexOfFirstItem, indexOfLastItem);
   // const currentItems = Object.keys(postsAll).slice(indexOfFirstItem, indexOfLastItem);
-  const currentItems = Object.entries(postsAll).slice(indexOfFirstItem, indexOfLastItem);
+  // const currentItems = Object.entries(postsAll).slice(indexOfFirstItem, indexOfLastItem);
   // const currentItems = Array.prototype.slice(postsAll.data, indexOfFirstItem, indexOfLastItem)
 
-  console.log("222: ",currentItems);
-
-  const renderPageNumbers = pages.map(number => {
-    if(number < maxPageNumberLimit + 1 && number > minPageNumberLimit){
+  const renderPageNumbers = pages.map((number) => {
+    if (number < maxPageNumberLimit + 1 && number > minPageNumberLimit) {
       return (
-        <li 
-          key={number} 
-          id={number} 
+        <li
+          key={number}
+          id={number}
           onClick={handleClick}
           className={currentPage === number ? "active" : null}
         >
@@ -70,55 +73,66 @@ const PostPage = () => {
   const handlePrebtn = () => {
     setCurrentPage(currentPage - 1);
 
-    if((currentPage -1)%pageNumberLimit === 0) {
+    if ((currentPage - 1) % pageNumberLimit === 0) {
       setMaxPageNumberLimit(maxPageNumberLimit - pageNumberLimit);
       setMinPageNumberLimit(minPageNumberLimit - pageNumberLimit);
     }
-  }
+  };
 
   const handleNextbtn = () => {
     setCurrentPage(currentPage + 1);
 
-    if(currentPage + 1 > maxPageNumberLimit) {
+    if (currentPage + 1 > maxPageNumberLimit) {
       setMaxPageNumberLimit(maxPageNumberLimit + pageNumberLimit);
       setMinPageNumberLimit(minPageNumberLimit + pageNumberLimit);
     }
-  }
-
+  };
+  const { currentItems, handlebutton } = useContext(undefined);
+  // add next/prev button into the detail page
   return (
     <div className="pagination">
       <h1>Post List</h1>
 
-      <div className="postPerPage">      
-      {
-        currentItems[1]?.length > 0 ?  
-        currentItems[1].map((post) => (   
-            <div key={post[1].id} className="container" onClick={() => postDetailHandler(post[1].id)}>
-              <PostCard post={post[1]} />   
+      <div className="postPerPage">
+        {currentItems?.length > 0 ? (
+          currentItems.map((post) => (
+            <div
+              key={post.id}
+              className="container"
+              onClick={() => postDetailHandler(post.id)}
+            >
+              <PostCard post={post} />
             </div>
-          ))          
-        :
+          ))
+        ) : (
           <p>There is no posts</p>
-      }  
+        )}
       </div>
 
       <ul className="pageNumbers">
         <li>
-          <button 
+          <button
             onClick={handlePrebtn}
-            disabled={currentPage === pages[0] ? true : false}  
-          > pre </button>
+            disabled={currentPage === pages[0] ? true : false}
+          >
+            {" "}
+            pre{" "}
+          </button>
         </li>
-          {renderPageNumbers}
+        {renderPageNumbers}
+        {/* create new component for this */}
         <li>
-          <button 
+          <button
             onClick={handleNextbtn}
-            disabled={currentPage === pages[pages.length -1] ? true : false}  
-          > next </button>
+            disabled={currentPage === pages[pages.length - 1] ? true : false}
+          >
+            {" "}
+            next{" "}
+          </button>
         </li>
-      </ul>    
+      </ul>
     </div>
-  )
-}
+  );
+};
 
-export default PostPage
+export default PostPage;
