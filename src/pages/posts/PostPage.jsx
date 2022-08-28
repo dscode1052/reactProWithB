@@ -16,6 +16,7 @@ const PostPage = () => {
   // Cache all data in FE, dont load duplicated data
   // you can just load the postsAll once, when you first time load the page.
   // you can just load the postDetail onece too, when you first time enter a post detail page.
+  // cache the data on the server side
   const navigate = useNavigate();
 
   useEffect(() => {
