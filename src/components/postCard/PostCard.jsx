@@ -1,8 +1,10 @@
+import './postCard.scss';
+
 const PostCard = ({post}) => {
   return (
-    <>
-      PostCard
-    </>
+    <div className="postCard">
+      <p>{post.title}</p>
+    </div>    
   )
 }
 

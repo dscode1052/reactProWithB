@@ -1,17 +1,29 @@
 import axios from 'axios';
 
-export const postBaseUrl = axios.create({
-  baseURL: 'https://jsonplaceholder.typicode.com'
-});
+const POST_BASE_URL = '/api/posts';
+
+// export const postBaseUrl = axios.create({
+//   // baseURL: 'https://jsonplaceholder.typicode.com'
+//   baseURL: '/api'
+// });
 
 export const getPostAll = async () => {
-  const response = await postBaseUrl.get('/posts');
+  const response = await axios.get(`${POST_BASE_URL}`);
+  
+  console.log("000: ",response);
+
+  return response.data;
+}
+
+export const getPostDetailPage = async (param = 1) => {
+  // const response = await postBaseUrl.get(`/posts/${param}`);
+  const response = await axios.get(`${POST_BASE_URL}/${param}`);
   
   return response.data;
 }
 
-export const getPostPage = async (pageParam = 1) => {
-  const response = await postBaseUrl.get(`/posts?_page=${pageParam}`);
+// export const getPostPage = async (pageParam = 1) => {
+//   const response = await postBaseUrl.get(`/posts?_page=${pageParam}`);
   
-  return response.data;
-}
+//   return response.data;
+// }
